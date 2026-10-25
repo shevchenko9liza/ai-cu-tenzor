@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build-reports.mjs",
-    "test": "node scripts/check-prototype.mjs"
+    "test": "node scripts/check-prototype.mjs",
+    "test:archive": "node scripts/check-archive.mjs"
   },
   "devDependencies": {
     "marked": "17.0.5",

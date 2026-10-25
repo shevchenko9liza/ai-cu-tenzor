@@ -1,0 +1,154 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Лаборатория 5 · задания 1–3 · Тензор</title><style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#252638;background:#f5f5f8;line-height:1.65;font-size:16px}*{box-sizing:border-box}body{margin:0}a{color:#5643bc;text-underline-offset:3px}header{background:white;border-bottom:1px solid #e2e1ea;padding:17px 28px}nav{max-width:1100px;margin:auto;display:flex;gap:22px;align-items:center;flex-wrap:wrap;font-size:13px}nav a{text-decoration:none}nav .brand{font-weight:800;color:#282434;font-size:19px;margin-right:auto}main{max-width:1100px;margin:34px auto;background:white;padding:44px 48px;border:1px solid #e2e1ea;border-radius:18px}h1{font-size:clamp(29px,4vw,42px);line-height:1.14;letter-spacing:-1px;margin:0 0 25px;max-width:850px}h2{font-size:25px;line-height:1.3;margin:40px 0 17px;letter-spacing:-.45px}h3{font-size:19px;margin:27px 0 12px}p{margin:13px 0}li{margin:7px 0}strong{font-weight:650}.table-wrap{max-width:100%;overflow-x:auto;border:1px solid #e2e1ea;border-radius:10px;margin:21px 0}table{border-collapse:collapse;width:100%;font-size:13px;line-height:1.55}th{background:#f2effb;text-align:left;font-weight:650;color:#453777}td,th{padding:13px 15px;vertical-align:top;min-width:120px}tr+tr td{border-top:1px solid #e8e7ee}tbody tr:nth-child(even){background:#fafafd}code{background:#f1eff7;border-radius:4px;padding:2px 4px;font-size:.86em;overflow-wrap:anywhere}pre{overflow:auto;background:#f4f2fa;padding:20px;border-radius:10px}blockquote{border-left:3px solid #8674cb;padding:4px 20px;margin-left:0;color:#615870}.meta{font-size:11px;color:#716882;text-transform:uppercase;letter-spacing:1.3px;margin-bottom:17px}.source{border-top:1px solid #e2e1ea;margin-top:42px;padding-top:18px;color:#6b6579;font-size:13px}.journey{margin:25px 0;padding:24px;background:#f5f2ff;border:1px solid #e0d9f5;border-radius:14px}.journey .nodes{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.journey .node{padding:11px 13px;border:1px solid #c9bee7;background:white;border-radius:8px;font-size:13px;font-weight:600}.journey .branch{font-size:13px;padding:12px 0 0;margin-top:12px;border-top:1px solid #dfd7f2}.journey figcaption{font-size:12px;color:#695e80;margin-top:15px}footer{max-width:1100px;margin:0 auto 30px;color:#706a7d;font-size:12px;padding:0 20px}input[type=checkbox]{accent-color:#5643bc}a:focus-visible{outline:3px solid #bd922f;outline-offset:4px}@media(max-width:700px){header{padding:16px}nav{gap:14px}nav .brand{width:100%}main{margin:16px 10px;padding:25px 19px;border-radius:13px}h2{font-size:22px}td,th{padding:11px;min-width:145px}p,li{font-size:15px}.journey{padding:16px}.journey .nodes{gap:5px}.journey .node{font-size:12px;padding:8px}}
+</style></head><body><header><nav aria-label="Навигация по материалам"><a class="brand" href="../index.html">τ Тензор</a><a href="../business/problem-and-evidence.html">Бизнес и проблема</a><a href="part1.html">Задачи и сценарии</a><a href="part2.html">Карта</a><a href="prototype.html">Прототип ↗</a></nav></header><main><div class="meta">Курс · ИИ-центричное предпринимательство · рабочая версия</div><h1>Лаборатория 5 · задания 1–3</h1>
+<p>Дата: 25.10.2026. Проект: «Тензор». Подтверждено пользовательницей: инженер станции проверяет пригодность архива для прогноза. Детали обновлены по переданному 25.10 отчёту и решениям. Прохождение в отчёте выполнено с делегированным управлением; самостоятельная ручная проверка студенткой не подтверждена. Входы: <a href="../business/problem-and-evidence.html">бизнес-задача и R1/R2</a>, материалы КТ-2, источники курса L5 и USM.</p>
+<h2>1. Сегменты и фокус</h2>
+<p>Создаём внешний цифровой инструмент для инженерной роли на предприятии. Инженер использует результат при подготовке проекта прогнозирования. Руководитель станции заказывает результат; предприятие/холдинг может оплачивать работу. Бизнес-гипотеза: платная ограниченная диагностика данных перед решением о пилоте. Цена и спрос не установлены.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Таблица, при необходимости прокрутите по горизонтали"><table>
+<thead>
+<tr>
+<th>Сторона и роль</th>
+<th>Сегмент по ситуации</th>
+<th>Когда</th>
+<th>Я хочу</th>
+<th>Чтобы</th>
+<th>Основание</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Пользователь: инженер станции</td>
+<td>Есть архив, требуется подготовить эксперимент</td>
+<td>Мне поручили оценить архив по выбранному оборудованию</td>
+<td>Разобраться в ограничениях и недостающих сведениях</td>
+<td>Обосновать следующий шаг руководителю</td>
+<td>Выбрано U25; боль и её стоимость ещё не проверены</td>
+</tr>
+<tr>
+<td>Заказчик: технический руководитель</td>
+<td>Решает о затратах на прогноз</td>
+<td>Приходит предложение о пилоте</td>
+<td>Понять, что можно проверить и что ещё нужно</td>
+<td>Не утверждать работу с неясным результатом</td>
+<td>Интерес руководителя из R2; конкретный процесс — гипотеза</td>
+</tr>
+<tr>
+<td>Возможный партнёр: аналитический подрядчик</td>
+<td>Получает неоднородные выгрузки</td>
+<td>Начинается обследование площадки</td>
+<td>Уточнить состав и качество исходников</td>
+<td>Оценить выполнимость и трудоёмкость</td>
+<td>Гипотеза ИИ, интервью не было</td>
+</tr>
+</tbody></table></div>
+<p><strong>Участок первой версии:</strong> подготовленный учебный архив → цель проверки → паспорт набора → замечания и исправление метаданных → повторная проверка → вывод с ограничениями → план следующего действия.</p>
+<p><strong>За пределами:</strong> получение доступа к промышленной сети, реальные загрузки, управление агрегатом, обучение модели, прогноз вероятности/срока отказа, расчёт экономии и продажа подписки. Это не доказанный разворот бизнеса к очистке таблиц: проверяем входной шаг основной идеи.</p>
+<h2>2. User Stories</h2>
+<p>Общая роль US1–US5: инженер станции. Все критерии ниже — предлагаемые критерии интерфейсного макета, не отраслевые стандарты качества архива.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Таблица, при необходимости прокрутите по горизонтали"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Я хочу</th>
+<th>Чтобы</th>
+<th>Объём</th>
+<th>Стартовые условия</th>
+<th>Критерии приёмки</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>US1</td>
+<td>Выбрать архив для заданной цели</td>
+<td>Получить вывод именно по нужной задаче</td>
+<td>В прототипе</td>
+<td>Доступен учебный набор</td>
+<td>На карточке видны объект и период; цель «эксперимент по прогнозу отказов» задана заранее; без выбора нельзя продолжить</td>
+</tr>
+<tr>
+<td>US2</td>
+<td>Увидеть состав архива и основания замечаний</td>
+<td>Понять ограничения и кому задать вопрос</td>
+<td>В прототипе</td>
+<td>Выбран набор</td>
+<td>Видны временные метки, часовой пояс, единицы и события; у каждого ограничения указана причина и пояснены термины; неизвестное не считается выполненным условием</td>
+</tr>
+<tr>
+<td>US3</td>
+<td>Уточнить известные метаданные и повторить проверку</td>
+<td>Не запрашивать весь архив заново из-за исправимой неопределённости</td>
+<td>В прототипе</td>
+<td>Есть неопределённый часовой пояс</td>
+<td>«Не знаю» нельзя подтвердить, доступен запрос; после выбора подтверждённого UTC+3 нужно сохранить сведения и отдельно повторить проверку; новый статус B виден в результате, плане и файле</td>
+</tr>
+<tr>
+<td>US4</td>
+<td>Получить вывод и ограничения применимости</td>
+<td>Решить, что делать дальше</td>
+<td>В прототипе</td>
+<td>Проверка завершена</td>
+<td>Нет общего «данные идеальны»; отсутствие журнала событий ограничивает именно проверку прогноза отказов; техническое прохождение не гарантирует модель</td>
+</tr>
+<tr>
+<td>US5</td>
+<td>Подготовить план запроса данных или эксперимента</td>
+<td>Передать руководителю понятный следующий шаг</td>
+<td>В прототипе</td>
+<td>Получен вывод</td>
+<td>План зависит от ограничений и содержит пустые поля ответственного, срока и результата действия для согласования человеком; файл сохраняет набор, актуальный статус, вывод и заполненные поля; возврат сохраняет записи текущего плана, смена набора с записями требует подтверждения</td>
+</tr>
+<tr>
+<td>US6</td>
+<td>Подключить реальный архив станции</td>
+<td>Работать с производственными данными</td>
+<td>За рамками</td>
+<td>Нет согласованного доступа</td>
+<td>Не заявляем реализованным</td>
+</tr>
+<tr>
+<td>US7</td>
+<td>Получать прогноз и оценку эффекта</td>
+<td>Менять обслуживание на основе проверенной модели</td>
+<td>За рамками</td>
+<td>Нужны пригодные данные и эксперимент</td>
+<td>Не заявляем реализованным</td>
+</tr>
+</tbody></table></div>
+<p>Приоритет US1–US5: они дают один законченный результат — решение о следующем действии по архиву. Польза этого результата для предприятия остаётся предметом кастдева.</p>
+<h2>3. Перечень сценариев</h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Таблица, при необходимости прокрутите по горизонтали"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Название</th>
+<th>Инициатор и участники</th>
+<th>Исходная ситуация</th>
+<th>Прохождение и результат</th>
+<th>US</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C1</td>
+<td>Разобрать согласованный набор</td>
+<td>Инженер; руководитель получает итог вне макета</td>
+<td>Учебный набор содержит метаданные и журнал событий</td>
+<td>Инженер проверяет паспорт, читает ограничения и получает план согласования эксперимента. Модель ещё не проверена</td>
+<td>US1, US2, US4, US5</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>Уточнить метаданные и продолжить</td>
+<td>Инженер; владелец архива вне макета</td>
+<td>Не указан часовой пояс</td>
+<td>Видит препятствие, выбирает подтверждённый пояс, нажимает «Сохранить уточнение» и отдельно повторяет проверку. Если пояс неизвестен, готовит запрос владельцу, не угадывает</td>
+<td>US1–US5</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>Получить отрицательный результат</td>
+<td>Инженер; владелец журнала ремонтов вне макета</td>
+<td>Нет истории отказов и ремонтов</td>
+<td>Не получает разрешение проверять качество прогноза отказов. Сохраняет список недостающих событий и согласование цели</td>
+<td>US1, US2, US4, US5</td>
+</tr>
+</tbody></table></div>
+<p>Подробности: <a href="archive-part2.html">часть 2</a>. Данные, цифры и ответы в макете вымышлены; отдельные архивы демонстрируют разные состояния одного типового процесса.</p>
+<div class="source">25 октября 2026 · <a href="archive-part1.md">Исходный Markdown</a>. Проектные предложения требуют проверки человеком и командой.</div></main><footer>Учебные результаты не подтверждают спрос. Сведения, гипотезы и синтетические данные разделены в материалах.</footer></body></html>

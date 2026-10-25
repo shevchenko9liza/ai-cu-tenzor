@@ -1,0 +1,72 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Техническая проверка прототипа · Тензор</title><style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#252638;background:#f5f5f8;line-height:1.65;font-size:16px}*{box-sizing:border-box}body{margin:0}a{color:#5643bc;text-underline-offset:3px}header{background:white;border-bottom:1px solid #e2e1ea;padding:17px 28px}nav{max-width:1100px;margin:auto;display:flex;gap:22px;align-items:center;flex-wrap:wrap;font-size:13px}nav a{text-decoration:none}nav .brand{font-weight:800;color:#282434;font-size:19px;margin-right:auto}main{max-width:1100px;margin:34px auto;background:white;padding:44px 48px;border:1px solid #e2e1ea;border-radius:18px}h1{font-size:clamp(29px,4vw,42px);line-height:1.14;letter-spacing:-1px;margin:0 0 25px;max-width:850px}h2{font-size:25px;line-height:1.3;margin:40px 0 17px;letter-spacing:-.45px}h3{font-size:19px;margin:27px 0 12px}p{margin:13px 0}li{margin:7px 0}strong{font-weight:650}.table-wrap{max-width:100%;overflow-x:auto;border:1px solid #e2e1ea;border-radius:10px;margin:21px 0}table{border-collapse:collapse;width:100%;font-size:13px;line-height:1.55}th{background:#f2effb;text-align:left;font-weight:650;color:#453777}td,th{padding:13px 15px;vertical-align:top;min-width:120px}tr+tr td{border-top:1px solid #e8e7ee}tbody tr:nth-child(even){background:#fafafd}code{background:#f1eff7;border-radius:4px;padding:2px 4px;font-size:.86em;overflow-wrap:anywhere}pre{overflow:auto;background:#f4f2fa;padding:20px;border-radius:10px}blockquote{border-left:3px solid #8674cb;padding:4px 20px;margin-left:0;color:#615870}.meta{font-size:11px;color:#716882;text-transform:uppercase;letter-spacing:1.3px;margin-bottom:17px}.source{border-top:1px solid #e2e1ea;margin-top:42px;padding-top:18px;color:#6b6579;font-size:13px}.journey{margin:25px 0;padding:24px;background:#f5f2ff;border:1px solid #e0d9f5;border-radius:14px}.journey .nodes{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.journey .node{padding:11px 13px;border:1px solid #c9bee7;background:white;border-radius:8px;font-size:13px;font-weight:600}.journey .branch{font-size:13px;padding:12px 0 0;margin-top:12px;border-top:1px solid #dfd7f2}.journey figcaption{font-size:12px;color:#695e80;margin-top:15px}footer{max-width:1100px;margin:0 auto 30px;color:#706a7d;font-size:12px;padding:0 20px}input[type=checkbox]{accent-color:#5643bc}a:focus-visible{outline:3px solid #bd922f;outline-offset:4px}@media(max-width:700px){header{padding:16px}nav{gap:14px}nav .brand{width:100%}main{margin:16px 10px;padding:25px 19px;border-radius:13px}h2{font-size:22px}td,th{padding:11px;min-width:145px}p,li{font-size:15px}.journey{padding:16px}.journey .nodes{gap:5px}.journey .node{font-size:12px;padding:8px}}
+</style></head><body><header><nav aria-label="Навигация по материалам"><a class="brand" href="../index.html">τ Тензор</a><a href="../business/problem-and-evidence.html">Бизнес и проблема</a><a href="part1.html">Задачи и сценарии</a><a href="part2.html">Карта</a><a href="prototype.html">Прототип ↗</a></nav></header><main><div class="meta">Курс · ИИ-центричное предпринимательство · рабочая версия</div><h1>Техническая проверка прототипа</h1>
+<p>Проверяет агент, 25.10.2026. Это проверка поведения интерфейса на учебных примерах, не личное прохождение студентки, не пользовательское исследование и не анализ промышленного архива.</p>
+<h2>Воспроизведение</h2>
+<p>Для просмотра установка не нужна: открыть <code>archive-check.html</code> в браузере. Все стили, данные и логика находятся в одном файле; сеть не требуется. Выбор, уточнения и поля плана хранятся до перезагрузки вкладки. При смене набора с записями есть предупреждение с отменой или подтверждением сброса.</p>
+<p>Для повторной технической проверки из корня репозитория нужны Node.js, зависимости <code>package.json</code> и Chromium для Playwright:</p>
+<pre><code class="language-sh">npm install
+npx playwright install chromium
+npm run build
+npm test
+</code></pre>
+<p>При подготовке использованы уже установленные зависимости среды: Node.js 24.22.1, marked 17.0.5, Playwright 1.62.1. Установка из npm на чистой машине в этой работе не выполнялась. Проверка браузера выполняется через локальный <code>file://</code>, в контексте с отключённой сетью. Скрипт: <code>scripts/check-prototype.mjs</code>. Скриншоты и отчёты запусков сохраняются локально в <code>.private/qa/</code>. Машиночитаемый результат текущей проверки опубликован отдельно в <code>verification-results.json</code>.</p>
+<h2>Проверяемые условия</h2>
+<ol>
+<li><p>Пустой выбор блокируется с понятной ошибкой.</p>
+</li>
+<li><p>C1 показывает технический вывод с ограничениями; паспорт содержит метку времени и единицы.</p>
+</li>
+<li><p>Возврат сохраняет выбранный набор.</p>
+</li>
+<li><p>Файл C1 содержит текущий набор, вывод и ограничения.</p>
+</li>
+<li><p>В C2 можно оставить неизвестный пояс и подготовить запрос.</p>
+</li>
+<li><p>Неизвестный пояс нельзя сохранить как подтверждённый.</p>
+</li>
+<li><p>После уточнения требуется повторная проверка.</p>
+</li>
+<li><p>Повтор заменяет прежний результат C2.</p>
+</li>
+<li><p>Скачивание C2 содержит актуальное уточнение.</p>
+</li>
+<li><p>Смена набора очищает уточнения и старый результат.</p>
+</li>
+<li><p>C3 остаётся отрицательным после возврата и повторной проверки.</p>
+</li>
+<li><p>Файл C3 сохраняет отрицательный вывод и состав запроса событий.</p>
+</li>
+<li><p>На ширине 390 px проверенные экраны не имеют горизонтальной прокрутки страницы.</p>
+</li>
+<li><p>Выбор и основной переход работают с клавиатуры; фокус переходит к новому заголовку.</p>
+</li>
+<li><p>HTML-отчёт открывает отдельный прототип в автономном режиме.</p>
+</li>
+<li><p>Во время этих проходов нет ошибок JavaScript и HTTP-запросов.</p>
+</li>
+<li><p>Наблюдаемые переходы укладываются в предложенную цель 1 секунда.</p>
+</li>
+<li><p>Карточки содержат объект, период и заданную цель.</p>
+</li>
+<li><p>Ограничения разбиты на пункты и объясняют период проверки.</p>
+</li>
+<li><p>Поля плана пусты до ввода и сохраняют текст при возврате.</p>
+</li>
+<li><p>Выгрузка содержит введённые ответственного, срок и результат без автоматического назначения.</p>
+</li>
+<li><p>Отмена смены архива сохраняет заполненный план.</p>
+</li>
+<li><p>Статус уточнения B виден явно; поля запроса не переходят в план эксперимента.</p>
+</li>
+<li><p>Повторные выгрузки B завершаются с одинаковым актуальным содержимым.</p>
+</li>
+</ol>
+<h2>Итог запуска 25.10.2026 после замечаний</h2>
+<p>Прошли 24 из 24 условий. Chromium 151.0.7922.34; ошибок JavaScript: 0; HTTP-запросов: 0. Максимальное наблюдаемое время автоматизированного действия — 45 мс; это локальный замер, не гарантия для других устройств.</p>
+<p>Визуально просмотрены скриншоты выбора, паспорта, трёх результатов, плана с ручными полями, уточнённого статуса B, предупреждения о сбросе, ошибки и мобильных экранов. Наложений элементов и обрезанных основных действий в просмотренных состояниях не обнаружено.</p>
+<p><a href="verification-results.json">Машиночитаемый результат</a>. SHA-256 проверенного прототипа: <code>baaa9ca22f060e5a9ff8ec1d3d12b3bb314045a6e58fd32a669ac056a604c325</code>.</p>
+<h2>Границы</h2>
+<p>Проверены Chromium на macOS и два размера окна: 1365 × 1000 и 390 × 844. Это не испытание на реальном телефоне, не проверка всех браузеров, не полный аудит доступности и не нагрузочное испытание. Личное понимание выводов, полезность для инженера и коммерческая ценность остаются непроверенными.</p>
+<p>В переданном отчёте первая выгрузка B завершилась с задержкой. В текущем прогоне две последовательные выгрузки завершились и содержали одинаковый актуальный текст. Причина исходного наблюдения не установлена; результат этого прогона не распространяется на другие браузеры.</p>
+<div class="source">25 октября 2026 · <a href="archive-verification.md">Исходный Markdown</a>. Проектные предложения требуют проверки человеком и командой.</div></main><footer>Учебные результаты не подтверждают спрос. Сведения, гипотезы и синтетические данные разделены в материалах.</footer></body></html>

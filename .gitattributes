@@ -1,2 +1,4 @@
 # Preserve the original course instruction copies byte-for-byte.
 lab04/skills/** -text
+*.pdf binary
+*.pptx binary
