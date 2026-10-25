@@ -5,10 +5,11 @@
   "description": "Учебные материалы и автономный прототип Тензор",
   "type": "module",
   "scripts": {
-    "build": "node scripts/build-reports.mjs",
+    "build": "node scripts/build-prototype.mjs && node scripts/build-reports.mjs",
     "test": "node scripts/check-prototype.mjs",
     "test:decision-support": "node scripts/check-decision-support.mjs",
-    "test:archive": "node scripts/check-archive.mjs"
+    "test:archive": "node scripts/check-archive.mjs",
+    "build:prototype": "node scripts/build-prototype.mjs"
   },
   "devDependencies": {
     "marked": "17.0.5",
