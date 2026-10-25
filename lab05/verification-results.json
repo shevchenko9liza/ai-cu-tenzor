@@ -1,9 +1,10 @@
 {
-  "checkedAt": "2026-10-25T13:37:19.735Z",
+  "checkedAt": "2026-10-25T13:53:02.311Z",
   "sha256": {
     "lab05/assets/pdu-scheme.png": "39c4de1f3a9d91de82c777230600ac1177702034cf13734976761884de9ec271",
     "lab05/assets/pen-ab-scheme.png": "46ad4e11000e1c47f3bf0a03a01e42dd94af988f5e526250a69da6c9cd185955",
-    "lab05/prototype.html": "b5042da13d42a92de649560e75cd0d801f2ee0d300f7309b84e4efc7abc8ba3d",
+    "lab05/prototype.html": "b231a8965e6b036e10f3889fde09f722ebc03f050646f28c13f08218a9940adb",
+    "lab05/decision-support.js": "12dbea681db20fe88597e073949964b78d0906a97219653d92f8774d7f80ced8",
     "lab05/pump-view.js": "de8d7da53f8a7835bca338030397ca2b4698d46eb77d4badc5318e6cba412a35",
     "lab05/vendor/three.min.js": "3b3a1c97de3ce65ec5b28c28d9f2805a738e9651622691ba771aa95c79d41d51"
   },
@@ -30,6 +31,10 @@
     "Every process metric exposes meaning, context, next step and limits",
     "Filters and empty search state work",
     "Trend controls change series and preserve the latest reading",
+    "Actionable analysis connects evidence, four field checks, a scenario horizon and conditional costs",
+    "Forecast boundary handles reached and missing limits instead of inventing time remaining",
+    "Cost calculator handles reserve, edited probability, negative effect and invalid data",
+    "Field findings revise hypotheses, block unsupported forecasts and survive navigation",
     "Missing owner and missing/past deadline cannot create a task",
     "Back navigation and action-specific drafts retain the correct fields",
     "Created task and downloaded text preserve identity and literal input",
@@ -44,7 +49,7 @@
     "No JavaScript errors or network requests across offline scenarios",
     "Without WebGL, component explanations and the full task entry remain available"
   ],
-  "maxInteractionMs": 325,
+  "maxInteractionMs": 326,
   "javascriptErrors": 0,
   "httpRequests": 0
 }
