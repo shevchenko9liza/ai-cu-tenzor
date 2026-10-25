@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-10-25T09:10:12.831Z",
+  "browser": "151.0.7922.34",
+  "passed": [
+    "Empty selection is blocked with a field error",
+    "C1 has a bounded technical conclusion",
+    "Back navigation preserves the active selection",
+    "Downloaded C1 plan contains the current fixture, result and limits",
+    "C2 permits an honest unknown and a request to the data owner",
+    "Unknown timezone cannot produce a positive result",
+    "A saved clarification still requires a new check",
+    "Recheck replaces the old C2 result",
+    "C2 download uses the updated result and fixture",
+    "Changing fixtures clears the previous clarification",
+    "C3 remains negative after navigation and rechecking",
+    "C3 download retains the negative conclusion and requested fields",
+    "At 390px, selection, passport, result, validation and plan do not overflow",
+    "Keyboard selection and primary action work; focus reaches the new heading",
+    "Report opens a separate prototype offline",
+    "No JavaScript errors or HTTP requests during the offline paths",
+    "Observed local interactions completed within the proposed 1s target"
+  ],
+  "maxTransitionMs": 44,
+  "javascriptErrors": 0,
+  "httpRequests": 0,
+  "viewports": [
+    {
+      "width": 1365,
+      "height": 1000
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ]
+}

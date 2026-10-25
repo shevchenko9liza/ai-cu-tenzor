@@ -1,0 +1,117 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { chromium } from 'playwright';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const out = path.join(root, '.private', 'qa');
+fs.mkdirSync(out, { recursive: true });
+const browser = await chromium.launch({ headless: true });
+const context = await browser.newContext({viewport:{width:1365,height:1000}, offline:true, acceptDownloads:true});
+const page = await context.newPage();
+const errors=[], requests=[], passed=[];
+let maxTransitionMs=0;
+page.on('pageerror', e=>errors.push(e.message));
+page.on('request', r=>{if(/^https?:/.test(r.url())) requests.push(r.url());});
+const click = async text => {
+  const start=performance.now();
+  await page.getByRole('button',{name:text,exact:true}).click();
+  maxTransitionMs=Math.max(maxTransitionMs, performance.now()-start);
+};
+const has = async text=>assert.ok(await page.getByText(text,{exact:true}).count(),`Missing: ${text}`);
+const screenshot = async name=>page.screenshot({path:path.join(out,`${name}.png`),fullPage:true});
+const checkpoint = name=>{passed.push(name);console.log(`PASS ${name}`);};
+const choose=async id=>{await page.locator(`input[value="${id}"]`).check();await click('Открыть паспорт →');};
+const noOverflow=async()=>assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),'Horizontal page overflow');
+try {
+  await page.goto(pathToFileURL(path.join(root,'lab05/prototype.html')).href);
+  await screenshot('01-select');
+  await click('Открыть паспорт →');
+  await has('Выберите один учебный архив, чтобы открыть паспорт.');
+  checkpoint('Empty selection is blocked with a field error');
+
+  await choose('A');await has('Паспорт архива');await has('Температура, °C');await has('01.01.2026 10:00:00');await screenshot('02-passport');
+  await click('Проверить архив →');await has('Можно готовить эксперимент');
+  assert.ok((await page.locator('#screen').innerText()).includes('не подтверждает качество прогноза'));
+  await screenshot('03-ready');checkpoint('C1 has a bounded technical conclusion');
+  await click('← К паспорту');await click('← Выбрать архив');
+  assert.ok(await page.locator('input[value="A"]').isChecked());
+  await click('Открыть паспорт →');await click('Проверить архив →');
+  checkpoint('Back navigation preserves the active selection');
+  await click('Подготовить следующий шаг →');await screenshot('04-plan');
+  const downloadPromise=page.waitForEvent('download');
+  await click('Скачать план .txt ↓');
+  const download=await downloadPromise;
+  const contents=fs.readFileSync(await download.path(),'utf8');
+  assert.equal(download.suggestedFilename(),'tenzor-archive-a-demo-plan.txt');
+  for(const s of ['Набор A','Можно готовить эксперимент','ОГРАНИЧЕНИЯ','Реальный анализ архива и ИИ не выполнялись'])assert.ok(contents.includes(s));
+  checkpoint('Downloaded C1 plan contains the current fixture, result and limits');
+
+  await click('Выбрать другой архив');await choose('B');await click('Проверить архив →');
+  await has('Нужно уточнить время');await screenshot('05-timezone');
+  await click('Не знаю — подготовить запрос');await has('Запрос сведений о времени');
+  assert.ok((await page.locator('#screen').innerText()).includes('Пока пояс неизвестен'));
+  checkpoint('C2 permits an honest unknown and a request to the data owner');
+  await click('← К результату');await click('Уточнить время →');
+  await click('Сохранить уточнение');
+  assert.equal(await page.locator('#timezone').getAttribute('aria-invalid'),'true');
+  await has('Пояс неизвестен. Запросите сведения у владельца или выберите подтверждённое значение для учебного примера.');
+  await screenshot('06-validation');checkpoint('Unknown timezone cannot produce a positive result');
+  await page.locator('#timezone').selectOption('UTC+3');await click('Сохранить уточнение');
+  await has('Уточнение сохранено');assert.equal(await page.getByText('Можно готовить эксперимент',{exact:true}).count(),0);
+  checkpoint('A saved clarification still requires a new check');
+  await click('Повторить проверку →');await has('Можно готовить эксперимент');
+  await has('Набор B · Повтор после уточнения UTC+3');
+  checkpoint('Recheck replaces the old C2 result');
+  await click('Подготовить следующий шаг →');
+  const second=page.waitForEvent('download');await click('Скачать план .txt ↓');
+  const bText=fs.readFileSync(await (await second).path(),'utf8');
+  assert.ok(bText.includes('Набор B'));assert.ok(bText.includes('UTC+3, уточнён в учебном сценарии'));
+  assert.ok(!bText.includes('Набор A'));
+  checkpoint('C2 download uses the updated result and fixture');
+  await click('Выбрать другой архив');await choose('A');await click('← Выбрать архив');await choose('B');
+  await click('Проверить архив →');await has('Нужно уточнить время');
+  checkpoint('Changing fixtures clears the previous clarification');
+
+  await click('← К паспорту');await click('← Выбрать архив');await choose('C');
+  await has('Отсутствует');await click('Проверить архив →');await has('Нужна история событий');
+  await screenshot('07-missing-events');
+  await click('Подготовить следующий шаг →');await has('Запрос истории событий');
+  assert.equal(await page.getByText('Можно готовить эксперимент',{exact:true}).count(),0);
+  await click('← К результату');await click('← К паспорту');await click('Проверить архив →');
+  await has('Нужна история событий');checkpoint('C3 remains negative after navigation and rechecking');
+  await click('Подготовить следующий шаг →');
+  const third=page.waitForEvent('download');await click('Скачать план .txt ↓');
+  const cText=fs.readFileSync(await (await third).path(),'utf8');
+  for(const s of ['Набор C','Нужна история событий','дату и время','достоверность'])assert.ok(cText.includes(s));
+  checkpoint('C3 download retains the negative conclusion and requested fields');
+
+  await page.setViewportSize({width:390,height:844});await noOverflow();await screenshot('08-mobile-plan');
+  await click('Выбрать другой архив');await noOverflow();await screenshot('09-mobile-select');
+  await choose('B');await noOverflow();await click('Проверить архив →');await noOverflow();
+  await click('Уточнить время →');await click('Сохранить уточнение');await noOverflow();
+  await screenshot('10-mobile-validation');checkpoint('At 390px, selection, passport, result, validation and plan do not overflow');
+
+  await page.goto(pathToFileURL(path.join(root,'lab05/prototype.html')).href);
+  await page.locator('input[value="A"]').focus();await page.keyboard.press('Space');
+  await page.keyboard.press('Tab');
+  assert.equal(await page.locator(':focus').innerText(),'Открыть паспорт →');
+  await page.keyboard.press('Enter');await has('Паспорт архива');
+  assert.equal(await page.locator(':focus').getAttribute('id'),'screen-title');
+  checkpoint('Keyboard selection and primary action work; focus reaches the new heading');
+
+  await page.goto(pathToFileURL(path.join(root,'lab05/part2.html')).href);
+  await noOverflow();assert.ok(await page.locator('.journey').count());
+  await page.getByRole('link',{name:'Открыть отдельный HTML-прототип'}).click();
+  await has('Выберите учебный архив');checkpoint('Report opens a separate prototype offline');
+  await page.setViewportSize({width:1365,height:1000});
+  await page.goto(pathToFileURL(path.join(root,'lab05/part2.html')).href);await screenshot('11-report');
+  assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
+  checkpoint('No JavaScript errors or HTTP requests during the offline paths');
+  assert.ok(maxTransitionMs<1000,`Transition too slow: ${maxTransitionMs}`);
+  checkpoint('Observed local interactions completed within the proposed 1s target');
+  const report={checkedAt:new Date().toISOString(),browser:browser.version(),passed,maxTransitionMs:Math.round(maxTransitionMs),javascriptErrors:errors.length,httpRequests:requests.length,viewports:[{width:1365,height:1000},{width:390,height:844}]};
+  fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(report,null,2)+'\n');
+  console.log(JSON.stringify(report,null,2));
+} finally {await browser.close();}

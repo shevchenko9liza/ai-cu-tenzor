@@ -1,0 +1,15 @@
+{
+  "name": "ai-cu-tenzor",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Учебные материалы и автономный прототип Тензор",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-reports.mjs",
+    "test": "node scripts/check-prototype.mjs"
+  },
+  "devDependencies": {
+    "marked": "17.0.5",
+    "playwright": "1.62.1"
+  }
+}
