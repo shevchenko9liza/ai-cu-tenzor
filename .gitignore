@@ -6,3 +6,6 @@ node_modules
 .private/
 __pycache__/
 *.pyc
+# Keep the local walkthrough recordings and download copies off the public repo.
+lab05/walkthrough-elizaveta-2026-10-25/*
+!lab05/walkthrough-elizaveta-2026-10-25/otchet-elizaveta.txt
