@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const files = ['README.md'];
+const files = ['README.md', 'lab04/review-draft.md'];
 for (const folder of ['business', 'course', 'lab05', 'kt3']) {
   files.push(...fs.readdirSync(path.join(root, folder)).filter(x => x.endsWith('.md')).map(x => `${folder}/${x}`));
 }
